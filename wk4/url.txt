@@ -1,6 +1,8 @@
 GitHub - https://github.com/tthorne/PWA2/tree/master/wk4
+
+
 Hello Ms. Silvestro,
-I've had a few issues this weekend that I came across that I'm not understanding. I really thought that I would have figured it out by the time to turn this in.  I will contact you in the morning to try to get your help.
+I've had a few issues this weekend that I came across that I'm not understanding. I really thought that I would have figured it out by the time to turn this in.  I will contact you in the morning to try to get your help.  Changes were also made to the database and is included in the xhr folder.
 
 Thank you,
 Tara Thorne

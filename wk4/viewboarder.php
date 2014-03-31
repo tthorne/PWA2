@@ -1,7 +1,18 @@
 <?php
 
-include('xhr/dbconnect.php');
+include 'xhr/dbconnect.php';
 
+$id = $_GET['id'];
+
+$result = mysql_query("SELECT * FROM boarders WHERE id='$id'")
+or die ('cannot select boarder info');
+
+$row = mysql_fetch_array($result);
+$id = $row['id'];
+$projectName = stripslashes($row['projectName']);
+$dueDate = $row['dueDate'];
+$startDate = $row['startDate'];
+$status = $row['status'];
 ?>
 <!doctype html>  
 
@@ -97,131 +108,45 @@ include('xhr/dbconnect.php');
 	        <div class="clear"></div>
 	    </div>
 		<div class="row">			
-			<h1 class="list">Boarders</h1>
+			<h1 class="list">View Boarder</h1>
 			<div class="listAdd">
+			 
 				  <button class="addbutton" data-toggle="modal" data-target="#myModal">
 				    +Add
 				  </button>
 				</div>
-				<?php
+					  <p><strong>Last Payment:</strong> <?php echo $projectName;?></p>     
+				      <p><strong>Last Payment:</strong> <?php echo date('F d, Y', strtotime($dueDate)); ?></p>
+				      <p><strong>Next Payment Due:</strong> <?php echo date('F d, Y', strtotime($startDate)); ?></p>
+			          <p><strong>Status:</strong> <?php
+
+					if ($status == 'paid') {Echo '<img src="images/circle.png"> Paid';}
+					else {Echo '<img src="images/circle-red.png"> Overdue';}
+
+					?></p>
+					<h2>Boarder's Horses</h2>
+					<?php
+            
+								$count = 0;
 			
-				// Query the database and get the count
-								$result = mysql_query("SELECT * FROM boarders");
-								$num_rows = mysql_num_rows($result);
-								// Display the results
-				
-								echo '<p><b>There are '.$num_rows .' total boarders.</b></p>';
-				// Number of records to show per page:
-				$display = 25;
-
-				// Determine how many pages there are...
-				if (isset($_GET['p']) && is_numeric($_GET['p'])) { // Already been determined.
-				$pages = $_GET['p'];
-
-				} else { // Need to determine.
-
-				 	// Count the number of records:
-					$q = "SELECT COUNT(id) FROM boarders";
-					$r = mysql_query ($q) or die(mysql_error());
-					$row = mysql_fetch_array ($r);
-					$records = $row[0];
-
-				// Calculate the number of pages...
-					if ($records > $display) { // More than 1 page.
-						$pages = ceil ($records/$display);
-					} else {
-						$pages = 1;
-					}
-
-				} // End of p IF.
-
-				// Determine where in the database to start returning results...
-				if (isset($_GET['s']) && is_numeric($_GET['s'])) {
-					$start = $_GET['s'];
-				} else {
-					$start = 0;
-
-				}
-						// Make the links to other pages, if necessary.
-				if ($pages > 1) {
-
-				// Add some spacing and start a paragraph:
-					echo '';
-
-					// Determine what page the script is on:	
-					$current_page = ($start/$display) + 1;
-					// If it's not the first page, make a Previous button:
-					if ($current_page != 1) {
-						echo '<a href="boarders.php?s=' . ($start - $display) . '&p=' . $pages . '">Previous </a>';
-
-					}
-
-				// Make all the numbered pages:
-					for ($i = 1; $i <= $pages; $i++) {
-						if ($i != $current_page) {
-							echo '<a href="boarders.php?s=' . (($display * ($i - 1))) . '&p=' . $pages . '">' . $i . ' </a> ';
-						} else {
-							echo '' . $i . ' </span>';
-						}
-					} // End of FOR loop.
-
-					// If it's not the last page, make a Next button:
-
-					if ($current_page != $pages) {
-
-						echo '<a href="boarders.php?s=' . ($start + $display) . '&p=' . $pages . '">Next</a>';
-
-					}
-
-	
-
-					echo '<br>'; // Close the paragraph.
-
-	
-
-				} // End of links section.
-
-				// Make the query:
-
-				$q = "SELECT * FROM boarders ORDER BY id ASC LIMIT $start, $display";		
-
-				$r = mysql_query ($q) or die(mysql_error());
-
-				if (mysql_num_rows($r) > 0) { 
-
-				// Table header:
-
-				echo '<table class="records">
-				<tr class="records">
-					<th class="records">Boarder Name</th>
-					<th class="records">Last Payment</th>
-					<th class="records">Next Payment</th>
-					<th class="records">Status</th>
-				</tr>';
-
-				// Fetch and print all the records....
-
-				$bg = '#edf1f2'; // Set the initial background color.
-
-				while ($row = mysql_fetch_array($r)) {
-
-					$bg = ($bg=='#edf1f2' ? '#ffffff' : '#edf1f2'); // Switch the background color.
-
-					echo '<tr class="records" bgcolor="' . $bg . '">
-						<td><a href=viewboarder.php?id=' . $row['id'] . '>' . $row['projectName'] . '</a></td>
-						<td>' . $row['dueDate'] . '</td>
-						<td>' . $row['startDate'] . '</td><td>';
-							if ($row['status'] == 'paid') {Echo '<img src="images/circle.png"> Paid';}
-							else {Echo '<img src="images/circle-red.png"> Overdue';}
-							Echo'</td></tr>';
-
-				} // End of WHILE loop.
-
-				echo '</table><br />';}
-
-				else { Echo "<i><center>We currently do not have any boarders.</center></i>";}
-
-				?>
+								$loop = mysql_query("SELECT * FROM horses WHERE owner='$id' order by name ASC") or die ('cannot select horses ' . mysql_error());
+								while ($row = mysql_fetch_array($loop))
+								{
+								$id = $row['id'];
+								$name = $row['name'];
+								$yob = $row['yob'];
+								$gender = $row['gender'];
+								$breed = $row['breed'];
+			
+								echo "<b><a href='viewhorse.php?id=$id'>$name</a></b> - $yob $breed $gender<br />";
+								$count++;
+								
+								echo "<br />";
+								}
+			
+								if (!$count)
+								echo "<center>This member doesn't have any horses.</center><br><br>";
+								?>
 				</div>
 		<div class="clear"></div>
 		<footer>
@@ -242,15 +167,15 @@ include('xhr/dbconnect.php');
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-dialog">
 			    <div class="modal-content">
-	  			<h1>Add New Boarder</h1>
+	  			<h1>Add Horse</h1>
 	  			<div id="register">
 	  				<form id="project">
-	  					<p><label class="register">Boarder Name:</label> <input name="projName" type="text" id="projName" class="register"></p>
-	  					<p><label class="register">Address:</label> <input name="projDesc" type="text" id="projDesc" class="register"></p>
-	  					<p><label class="register">Status:</label> <input name="status" type="text" id="status" class="register"></p>
-	  					<p><label class="register">Last Payment:</label> <input name="projDue" type="text" id="projDue" class="datepicker register"></p>
-						<p><label class="register">Payment Due:</label> <input name="projStart" type="text" id="projStart" class="datepicker register"></p>	
-	  					<p><input name="projects" type="button" id="boarder" value="Submit" class="bt_register"></p>
+	  					<p><label class="register">Name:</label> <input name="name" type="text" id="name" class="register"></p>
+						<p><label class="register">Year of Birth:</label> <input name="yob" type="text" id="yob" class="register"></p>
+	  					<p><label class="register">Breed:</label> <input name="breed" type="text" id="breed" class="register"></p>
+						<p><label class="register">Gender:</label> <input name="gender" type="text" id="gender" class="register"></p>
+						<p><label class="register">Owner:</label> <input name="owner" type="text" id="owner" class="register" value="<?php echo $id;?>"></p>
+	  					<p><input name="projects" type="button" id="addhorse" value="Submit" class="bt_register"></p>
 	  				</form>
 			    </div>
 			  </div>

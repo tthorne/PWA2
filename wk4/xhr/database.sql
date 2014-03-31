@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 31, 2014 at 02:46 AM
+-- Generation Time: Mar 31, 2014 at 06:19 AM
 -- Server version: 5.1.67-rel14.3-log
 -- PHP Version: 5.3.17
 
@@ -86,17 +86,71 @@ INSERT INTO `clients` (`id`, `clientName`, `primaryContact`, `phone`, `address`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `info`
+-- Table structure for table `feed`
 --
 
-CREATE TABLE IF NOT EXISTS `info` (
+CREATE TABLE IF NOT EXISTS `feed` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `clientID` int(11) unsigned DEFAULT NULL,
+  `teamID` int(11) unsigned DEFAULT NULL,
+  `projectName` text,
+  `quantity` int(11) DEFAULT NULL,
+  `status` char(32) DEFAULT NULL,
+  `projectCreator` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `teamID` (`teamID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+
+--
+-- Dumping data for table `feed`
+--
+
+INSERT INTO `feed` (`id`, `clientID`, `teamID`, `projectName`, `quantity`, `status`, `projectCreator`) VALUES
+(1, NULL, NULL, 'Purina Omolene #500 Horse Feed', 5, 'ordered', 25),
+(2, NULL, NULL, 'Purina Omolene #400 Horse Feed', 3, 'Ordered', 25),
+(3, NULL, NULL, 'Purina Omolene #300 Horse Feed', 5, 'ordered', 25),
+(4, NULL, NULL, 'Purina Omolene #300 Horse Feed', 5, 'ordered', 25),
+(5, NULL, NULL, 'Purina Omolene #300 Horse Feed', 5, 'ordered', 25),
+(6, NULL, NULL, 'PurinaÂ® Strategy Healthy Edge Horse Feed', 6, 'urgent', 25),
+(7, NULL, NULL, 'Alfalfa', 1, 'Urgent', 25),
+(8, NULL, NULL, 'Timothy', 1, 'Urgent', 25),
+(9, NULL, NULL, 'Alfalfa/Timothy', 1, 'Urgent', 25),
+(10, NULL, NULL, 'Purina Equine Junior Horse Feed', 5, 'ordered', 25),
+(11, NULL, NULL, 'Purina Equine Adult Horse Feed', 5, 'ordered', 25),
+(12, NULL, NULL, 'Purina Equine Senior Horse Feed', 5, 'ordered', 25),
+(13, NULL, NULL, 'Purina Equine Senior Active Healthy Edge Horse Feed', 5, 'ordered', 25),
+(14, NULL, NULL, 'Purina Ultium Competition Horse Formula', 5, 'ordered', 25),
+(15, NULL, NULL, 'Purina Ultium Growth Horse Formula', 5, 'ordered', 25),
+(16, NULL, NULL, 'Purina FreedomFlex Joint Health Product', 5, 'ordered', 25),
+(17, NULL, NULL, 'Purina HydraSalt Salt Supplement', 5, 'ordered', 25);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `horses`
+--
+
+CREATE TABLE IF NOT EXISTS `horses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fname` varchar(100) NOT NULL,
-  `lname` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `phone` varchar(100) NOT NULL,
+  `name` text NOT NULL,
+  `yob` int(4) NOT NULL,
+  `breed` varchar(255) NOT NULL,
+  `gender` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `projectCreator` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `horses`
+--
+
+INSERT INTO `horses` (`id`, `name`, `yob`, `breed`, `gender`, `owner`, `projectCreator`) VALUES
+(1, 'Rey Castellano NE', 2006, 'Andalusian', 'Stallion', '1', 25),
+(2, 'Rembrandt NE', 2006, 'Friesian', 'Stallion', '2', 25),
+(3, 'Nightshades Gypsy King', 2006, 'Gypsy Vanner', 'Stallion', '3', 25),
+(4, 'Raerzara', 2006, 'Andalusian', 'Mare', '4', 25),
+(5, 'Adelheid', 2006, 'Andalusian', 'Mare', '4', 25);
 
 -- --------------------------------------------------------
 
@@ -199,6 +253,30 @@ INSERT INTO `teams` (`id`, `name`, `description`, `website`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `training`
+--
+
+CREATE TABLE IF NOT EXISTS `training` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `horseid` int(11) NOT NULL,
+  `session` text NOT NULL,
+  `workon` text NOT NULL,
+  `last` date NOT NULL,
+  `next` date NOT NULL,
+  `projectCreator` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `training`
+--
+
+INSERT INTO `training` (`id`, `horseid`, `session`, `workon`, `last`, `next`, `projectCreator`) VALUES
+(1, 1, 'Rey needs to work on lead changes.', 'Rey needs to work on lead changes.', '0000-00-00', '0000-00-00', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -279,7 +357,37 @@ INSERT INTO `userslink` (`userID`, `projectID`) VALUES
 (25, 4),
 (25, 5),
 (25, 6),
-(25, 7);
+(25, 7),
+(25, 1),
+(25, 2),
+(25, 3),
+(25, 4),
+(25, 5),
+(25, 6),
+(25, 7),
+(25, 8),
+(25, 9),
+(25, 10),
+(25, 11),
+(25, 12),
+(25, 13),
+(25, 14),
+(25, 15),
+(25, 16),
+(25, 17),
+(25, 1),
+(25, 2),
+(25, 3),
+(25, 1),
+(25, 2),
+(25, 3),
+(25, 4),
+(25, 5),
+(0, 1),
+(0, 1),
+(0, 1),
+(0, 2),
+(0, 1);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

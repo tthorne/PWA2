@@ -97,7 +97,7 @@ include('xhr/dbconnect.php');
 	        <div class="clear"></div>
 	    </div>
 		<div class="row">			
-			<h1 class="list">Boarders</h1>
+			<h1 class="list">Feed Records</h1>
 			<div class="listAdd">
 				  <button class="addbutton" data-toggle="modal" data-target="#myModal">
 				    +Add
@@ -106,13 +106,12 @@ include('xhr/dbconnect.php');
 				<?php
 			
 				// Query the database and get the count
-								$result = mysql_query("SELECT * FROM boarders");
+								$result = mysql_query("SELECT * FROM feed");
 								$num_rows = mysql_num_rows($result);
 								// Display the results
 				
-								echo '<p><b>There are '.$num_rows .' total boarders.</b></p>';
 				// Number of records to show per page:
-				$display = 25;
+				$display = 15;
 
 				// Determine how many pages there are...
 				if (isset($_GET['p']) && is_numeric($_GET['p'])) { // Already been determined.
@@ -121,7 +120,7 @@ include('xhr/dbconnect.php');
 				} else { // Need to determine.
 
 				 	// Count the number of records:
-					$q = "SELECT COUNT(id) FROM boarders";
+					$q = "SELECT COUNT(id) FROM feed";
 					$r = mysql_query ($q) or die(mysql_error());
 					$row = mysql_fetch_array ($r);
 					$records = $row[0];
@@ -152,14 +151,14 @@ include('xhr/dbconnect.php');
 					$current_page = ($start/$display) + 1;
 					// If it's not the first page, make a Previous button:
 					if ($current_page != 1) {
-						echo '<a href="boarders.php?s=' . ($start - $display) . '&p=' . $pages . '">Previous </a>';
+						echo '<a href="feed.php?s=' . ($start - $display) . '&p=' . $pages . '">Previous </a>';
 
 					}
 
 				// Make all the numbered pages:
 					for ($i = 1; $i <= $pages; $i++) {
 						if ($i != $current_page) {
-							echo '<a href="boarders.php?s=' . (($display * ($i - 1))) . '&p=' . $pages . '">' . $i . ' </a> ';
+							echo '<a href="feed.php?s=' . (($display * ($i - 1))) . '&p=' . $pages . '">' . $i . ' </a> ';
 						} else {
 							echo '' . $i . ' </span>';
 						}
@@ -169,7 +168,7 @@ include('xhr/dbconnect.php');
 
 					if ($current_page != $pages) {
 
-						echo '<a href="boarders.php?s=' . ($start + $display) . '&p=' . $pages . '">Next</a>';
+						echo '<a href="feed.php?s=' . ($start + $display) . '&p=' . $pages . '">Next</a>';
 
 					}
 
@@ -183,7 +182,7 @@ include('xhr/dbconnect.php');
 
 				// Make the query:
 
-				$q = "SELECT * FROM boarders ORDER BY id ASC LIMIT $start, $display";		
+				$q = "SELECT * FROM feed ORDER BY id ASC LIMIT $start, $display";		
 
 				$r = mysql_query ($q) or die(mysql_error());
 
@@ -193,9 +192,8 @@ include('xhr/dbconnect.php');
 
 				echo '<table class="records">
 				<tr class="records">
-					<th class="records">Boarder Name</th>
-					<th class="records">Last Payment</th>
-					<th class="records">Next Payment</th>
+					<th class="records">Feed</th>
+					<th class="records">Quantity</th>
 					<th class="records">Status</th>
 				</tr>';
 
@@ -208,18 +206,17 @@ include('xhr/dbconnect.php');
 					$bg = ($bg=='#edf1f2' ? '#ffffff' : '#edf1f2'); // Switch the background color.
 
 					echo '<tr class="records" bgcolor="' . $bg . '">
-						<td><a href=viewboarder.php?id=' . $row['id'] . '>' . $row['projectName'] . '</a></td>
-						<td>' . $row['dueDate'] . '</td>
-						<td>' . $row['startDate'] . '</td><td>';
-							if ($row['status'] == 'paid') {Echo '<img src="images/circle.png"> Paid';}
-							else {Echo '<img src="images/circle-red.png"> Overdue';}
+						<td>' . $row['projectName'] . '</td>
+						<td>' . $row['quantity'] . '</td><td>';
+							if ($row['status'] == 'ordered') {Echo '<img src="images/circle.png"> Ordered';}
+							else {Echo '<img src="images/circle-red.png"> Urgent';}
 							Echo'</td></tr>';
 
 				} // End of WHILE loop.
 
 				echo '</table><br />';}
 
-				else { Echo "<i><center>We currently do not have any boarders.</center></i>";}
+				else { Echo "<i><center>We currently do not have any feed records.</center></i>";}
 
 				?>
 				</div>
@@ -242,15 +239,13 @@ include('xhr/dbconnect.php');
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-dialog">
 			    <div class="modal-content">
-	  			<h1>Add New Boarder</h1>
+	  			<h1>Add New Feed Record</h1>
 	  			<div id="register">
 	  				<form id="project">
-	  					<p><label class="register">Boarder Name:</label> <input name="projName" type="text" id="projName" class="register"></p>
-	  					<p><label class="register">Address:</label> <input name="projDesc" type="text" id="projDesc" class="register"></p>
+	  					<p><label class="register">Feed Name:</label> <input name="projName" type="text" id="projName" class="register"></p>
+						<p><label class="register">Quantity:</label> <input name="quantity" type="text" id="quantity" class="register"></p>
 	  					<p><label class="register">Status:</label> <input name="status" type="text" id="status" class="register"></p>
-	  					<p><label class="register">Last Payment:</label> <input name="projDue" type="text" id="projDue" class="datepicker register"></p>
-						<p><label class="register">Payment Due:</label> <input name="projStart" type="text" id="projStart" class="datepicker register"></p>	
-	  					<p><input name="projects" type="button" id="boarder" value="Submit" class="bt_register"></p>
+	  					<p><input name="projects" type="button" id="feed" value="Submit" class="bt_register"></p>
 	  				</form>
 			    </div>
 			  </div>

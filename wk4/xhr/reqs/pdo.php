@@ -4,20 +4,19 @@ error_reporting(E_ALL);
 
 class PDB{
 
-		private $dbhost = 'localhost';
-		private $dbport = '8889';
-		private $dbname = 'dossier_db';
-		private $dbuser = 'root';
-		private $dbpass = 'root';
+	private $dbhost = 'localhost';
+	private $dbname = 'curlylox_fullsail';
+	private $dbuser = 'curlylox_fullsai';
+	private $dbpass = 'Warlock2012';
 	
-		public $db = null;
+	public $db = null;
 	
 	
-		public function __construct(){
+	public function __construct(){
 		
-			try{
-				$this->db = new PDO("mysql:host=$this->dbhost;port=$this->dbport;dbname=$this->dbname", $this->dbuser, $this->dbpass);
-				$this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );  
+		try{
+			$this->db = new PDO("mysql:host=$this->dbhost;dbname=$this->dbname", $this->dbuser, $this->dbpass);
+			$this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
 		
 		}catch (PDOException $e){
 			errormsg($e->getMessage());

@@ -24,19 +24,19 @@ $dbh = new PDB();
 $db = $dbh->db;
 $site = new Site($db);
 
-$tasks = $dbh->getTasks($projectID);
-$taskArr = array();
+$horses = $dbh->getHorses($owner);
+$horsesArr = array();
 
-for($i=0; $i<count($tasks); $i++){
-	array_push($taskArr, $tasks[$i]->id);
+for($i=0; $i<count($horses); $i++){
+	array_push($horsesArr, $horses[$i]->id);
 }
 
-$arr = implode(", ", $taskArr);
+$arr = implode(", ", $horsesArr);
 
 try{
 	$ct = 0;
 	if(!empty($arr)){ //rich and justin edit
-		$sql = "DELETE FROM tasks WHERE id IN (".$arr.")";
+		$sql = "DELETE FROM horses WHERE id IN (".$arr.")";
 		//errormsg($arr);
 		$st = $db->prepare($sql);
 	

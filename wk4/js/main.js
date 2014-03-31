@@ -107,39 +107,102 @@
 			}
 		});
 	});
+	
+	/* ======================= New Feed Records ======================= */	
+		$('#feed').on('click', function(e) {
+			e.preventDefault();
+			var projName = $('#projName').val(), 
+			quantity = $('#quantity').val(), 
+			status = $('#status').val();
+
+			$.ajax({
+				url: "xhr/new_feed.php",
+				type: "post",
+				dataType: "json",
+				data: {
+					projectName: projName,
+					quantity: quantity,
+					status: status
+				},
+				success: function(response) {
+					console.log('Testing for success');
+
+					if(response.error) {
+						alert(response.error);
+					} else {
+						window.location.assign("feed.php");
+					};
+				}
+			});
+		});
+		
+		/* ======================= Training Session ======================= */	
+			$('#training').on('click', function(e) {
+				e.preventDefault();
+				var last = $('#last').val(), 
+				next = $('#next').val(), 
+				session = $('#session').val(), 
+				workon = $('#workon').val(), 
+				horseid = $('#horseid').val();
+
+				$.ajax({
+					url: "xhr/new_trainingsession.php",
+					type: "post",
+					dataType: "json",
+					data: {
+						last: last,
+						next: next,
+						session: session,
+						workon: workon,
+						horseid: horseid
+					},
+					success: function(response) {
+						console.log('Testing for success');
+
+						if(response.error) {
+							alert(response.error);
+						} else {
+							window.location.assign("training.php");
+						};
+					}
+				});
+			});
+
 
 	
- // ************** Update Project Function ****************
+ // ************** Add Horse ****************
 		
 		
-	$('#updatbtn').on('click', function(e) {
+	$('#addhorse').on('click', function(e) {
 		e.preventDefault();
-		var projName = $('#projName').val(),
-		projDesc = $('#projDesc').val(), 
-		projDue = $('#projDue').val(), 
-		status = $('#status').val();
+		var name = $('#name').val(),
+		yob = $('#yob').val(),
+		breed = $('#breed').val(), 
+		gender = $('#gender').val(),
+		owner = $('#owner').val();
 				
-        $.ajax({
-            url: 'xhr/update_project.php',
-            type: 'post',
-            data: {
-                projectID: id,
-                projectName: name,
-                status: stat,
-                projectDescription: descrip,
-                dueDate: date
-            },
-            dataType: 'json',
-            success: function(response){
-                if(response.error){
-                    $('.errormsg2').empty()
-                }else{
-                   console.log('success');
-                    window.location.assign('projects.html');
-                }
-            }
-        });
-    });
+		$.ajax({
+			url: "xhr/new_horse.php",
+			type: "post",
+			dataType: "json",
+			data: {
+				name: name,
+				yob: yob,
+				gender: gender,
+				breed: breed,
+				owner: owner
+			},
+			success: function(response) {
+				console.log('Testing for success');
+
+				if(response.error) {
+					alert(response.error);
+				} else {
+					window.location.assign("view_boarder.php?id=$owner");
+				};
+			}
+		});
+	});
 	
      // ---------- Delete Buttons ----------------
                         $('.deletebtn').each(function(i){
@@ -162,30 +225,7 @@
                                 }
                             });
                         }); // ------- end delete buttons ------
-
-// ---------- Delete Buttons ----------------
-	$('#deleteboarder').each(function(i){
-		$(this).attr('id', projectList[i].id);
-	}).on('click', function(){
-		var idd = Number($(this).attr('id'));
-		$.ajax({
-            url: 'xhr/delete_boarder.php',
-            data: {
-                projectID: id
-            },
-				type: 'post',
-				dataType: 'json',
-				success: function(response){
-					if(response.error){
-						console.log(response.error)
-					}else{
-						window.location.assign('boarders.php');
-					}
-				}
-			});
-		}); // ------- end delete buttons ------
-
-
+						
 /* ======================= Logout ======================= */
 	
 	$('#logOut').click(function(e){
